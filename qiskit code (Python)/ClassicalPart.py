@@ -3,7 +3,7 @@
     #pip install pennylane-qiskit
 from pennylane import numpy as np
 import pennylane as qml
-from qiskit import QuantumRegister
+from qiskit import QuantumCircuit, QuantumRegister
 
 
 #Input:
@@ -26,8 +26,9 @@ def getHamiltonian (symbols, coordinates):
 def getHartreeFockState (circuit, electrons, orbitals):
     HFState = qml.qchem.hf_state(electrons, orbitals)
     register = QuantumRegister(orbitals)
-    circuit.add(register)
+    circuit.add_register(register)
 
     for i in range(len(HFState)):
         if (HFState[i] == 1):
             circuit.x(register[i])
+
