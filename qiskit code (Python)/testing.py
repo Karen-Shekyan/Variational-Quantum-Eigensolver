@@ -7,7 +7,7 @@ import numpy as np
 #function to change bool String to integer
 def boolStringToInt(array):
     integer = 0
-    for i in range(len(array)):
+    for i in range(0, len(array)):
         if (array[i] == "1"):
             integer += 2^i
     return integer

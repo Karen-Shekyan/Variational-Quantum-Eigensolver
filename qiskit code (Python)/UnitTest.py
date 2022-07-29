@@ -13,7 +13,10 @@ import testing
 class VQETests(unittest.TestCase):
 
     def test1(self):
-        testing.vqe(5, 10, 10)
+        if testing.boolStringToInt("1000") != 1:
+            {
+            self.fail(f"You were suppose to measure a 3 but you got 1")
+            }
         print("Test 1 passed!")
 
 
