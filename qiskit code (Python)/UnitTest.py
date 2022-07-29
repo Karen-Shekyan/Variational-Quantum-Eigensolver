@@ -7,12 +7,13 @@ from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 from qiskit import execute
 from qiskit import Aer
 import random
-
+import pennylane
+import testing
 
 class VQETests(unittest.TestCase):
 
     def test1(self):
-
+        testing.vqe(5, 10, 10)
         print("Test 1 passed!")
 
 
