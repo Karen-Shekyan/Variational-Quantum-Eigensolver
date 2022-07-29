@@ -1,9 +1,19 @@
 #commands needed:
     #pip install pennylane --upgrade
     #pip install pennylane-qiskit
+    #pip install qiskit-nature
+    #pip install pyscf
 from pennylane import numpy as np
 import pennylane as qml
 from qiskit import QuantumCircuit, QuantumRegister
+from qiskit_nature.drivers import UnitsType, Molecule
+from qiskit_nature.drivers.second_quantization import (
+    ElectronicStructureDriverType,
+    ElectronicStructureMoleculeDriver,
+)
+from qiskit_nature.problems.second_quantization import ElectronicStructureProblem
+from qiskit_nature.converters.second_quantization import QubitConverter
+from qiskit_nature.mappers.second_quantization import JordanWignerMapper, ParityMapper
 
 
 #Input:
@@ -32,3 +42,26 @@ def getHartreeFockState (circuit, electrons, orbitals):
         if (HFState[i] == 1):
             circuit.x(register[i])
 
+
+
+
+
+#DEBUG CODE BELOW
+
+# circuit = QuantumCircuit()
+# getHartreeFockState(circuit, 2, 4)
+# print(circuit)
+
+# (x,y) = getHamiltonian(["H"], np.array([0.0, 0.0, 0.0]))
+# print(x)
+# print(y)
+# print(x.coeffs)
+# print(x.ops)
+
+molecule = Molecule(geometry=["H", [0.0, 0.0, 0.0]], charge=0, multiplicity=1)
+driver = ElectronicStructureMoleculeDriver(
+    molecule, basis="sto3g", driver_type=ElectronicStructureDriverType.PYSCF
+)
+es_problem = ElectronicStructureProblem(driver)
+second_q_op = es_problem.second_q_ops()
+print(second_q_op[0])
