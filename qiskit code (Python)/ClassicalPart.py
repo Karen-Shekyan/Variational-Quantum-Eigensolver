@@ -16,7 +16,6 @@ from qiskit_nature.transformers.second_quantization.electronic import FreezeCore
 from qiskit_nature.problems.second_quantization import ElectronicStructureProblem
 from qiskit_nature.converters.second_quantization import QubitConverter
 from qiskit_nature.mappers.second_quantization import ParityMapper
-# import matplotlib.pyplot as plt
 import numpy as np
 from qiskit_nature.circuit.library import UCCSD, HartreeFock
 from qiskit.circuit.library import EfficientSU2
@@ -41,7 +40,7 @@ backend = Aer.get_backend("aer_simulator")
     #params - numpy array containing parameters to be optimized
 #Output:
     #returns a numpy array containing optimized parameters
-def optimizeParams(params=np.array([])):
+def optimizeParams(objective_function, params=np.array([])):
     optimizer = COBYLA(maxiter=500, tol=0.0001)
     result = optimizer.minimize(fun=objective_function, x0=params)
     return result.x
@@ -64,38 +63,38 @@ def getHartreeFockState(electrons, orbitals, circuit):
 #                     FUNCTIONS TO BE USED HERE. THE REST ARE HELPER METHODS                     #
 ##################################################################################################
 
-def get_var_form(params):
-    qr = QuantumRegister(1, name="q")
-    cr = ClassicalRegister(1, name='c')
-    qc = QuantumCircuit(qr, cr)
-    qc.u(params[0], params[1], params[2], qr[0])
-    qc.measure(qr, cr[0])
-    return qc
+# def get_var_form(params):
+#     qr = QuantumRegister(1, name="q")
+#     cr = ClassicalRegister(1, name='c')
+#     qc = QuantumCircuit(qr, cr)
+#     qc.u(params[0], params[1], params[2], qr[0])
+#     qc.measure(qr, cr[0])
+#     return qc
 
 
-def counts_to_distr(counts):
-    """Convert Qiskit result counts to dict with integers as
-    keys, and pseudo-probabilities as values."""
-    n_shots = sum(counts.values())
-    return {int(k, 2): v/n_shots for k, v in counts.items()}
+# def counts_to_distr(counts):
+#     """Convert Qiskit result counts to dict with integers as
+#     keys, and pseudo-probabilities as values."""
+#     n_shots = sum(counts.values())
+#     return {int(k, 2): v/n_shots for k, v in counts.items()}
 
 
-def objective_function(params):
-    """Compares the output distribution of our circuit with
-    parameters `params` to the target distribution."""
-    # Create circuit instance with paramters and simulate it
-    qc = get_var_form(params)
-    result = backend.run(qc).result()
-    # Get the counts for each measured state, and convert
-    # those counts into a probability dict
-    output_distr = counts_to_distr(result.get_counts())
-    # Calculate the cost as the distance between the output
-    # distribution and the target distribution
-    cost = sum(
-        abs(target_distr.get(i, 0) - output_distr.get(i, 0))
-        for i in range(2**qc.num_qubits)
-    )
-    return cost
+# def objective_function(params):
+#     """Compares the output distribution of our circuit with
+#     parameters `params` to the target distribution."""
+#     # Create circuit instance with paramters and simulate it
+#     qc = get_var_form(params)
+#     result = backend.run(qc).result()
+#     # Get the counts for each measured state, and convert
+#     # those counts into a probability dict
+#     output_distr = counts_to_distr(result.get_counts())
+#     # Calculate the cost as the distance between the output
+#     # distribution and the target distribution
+#     cost = sum(
+#         abs(target_distr.get(i, 0) - output_distr.get(i, 0))
+#         for i in range(2**qc.num_qubits)
+#     )
+#     return cost
 
 
 
