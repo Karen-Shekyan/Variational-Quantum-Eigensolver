@@ -70,10 +70,10 @@ def rotateAndMeasure(pauliOperator, stateFunc):
     
     return sampler.eval().real  
 
-def VQE(electrons, orbitals, theta, standardError, pauliOperator):
-    #theta is an initial angle
+def VQE(electrons, orbitals, standardError, thetaArray, pauliOperator):
+    #thetaArray has orbitals*2 rows
     #target standard error is given to function
-    #function should return expectationvalue for single angle
+    #function should return expectationvalue for array of angles
     register = QuantumRegister(orbitals)
     circuit = QuantumCircuit(register)
     getHartreeFockState(electrons, circuit, register)
@@ -81,14 +81,16 @@ def VQE(electrons, orbitals, theta, standardError, pauliOperator):
     measured = []
     lastMin = 0
     minExp = 1
-    thetalist = np.array([theta])
+    
     while (lastMin < 100):
-        for i in range(orbitals^4):
-            for i in range(round((1/standardError)**2.0)):
+        for j in range(orbitals**4):
+            for l in range(round((1/standardError)**2.0)):
+                print(l)
                 #prepare state function of theta[i]
-                for qubit in register:
-                    circuit.rx(theta, qubit)
-                    circuit.ry(theta, qubit)
+                for i in range(orbitals):
+                    # print(i)
+                    circuit.rx(thetaArray[2*i], register[i])
+                    circuit.ry(thetaArray[2*i+1], register[i])
 
                 #entangled ansatz states preparation
                 for k in range(len(register) - 1):
@@ -102,12 +104,16 @@ def VQE(electrons, orbitals, theta, standardError, pauliOperator):
                     lastMin = 0
                 else:
                     lastMin += 1
+            print("\n")
+            print(j)
         #gets rid of all expectation values after the minimum value
         upToMin = measured[:len(measured)-lastMin]
     
         #adds up the remaining expectation values
         expectationValue = sum(upToMin)
-        thetalist = optimizeParams(thetalist)
+        thetaArray = optimizeParams(thetaArray)
+        print("\n")
+        print(lastMin)
     return expectationValue
 
 # backup measeurement algorithm for energy
