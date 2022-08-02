@@ -1,4 +1,3 @@
-# Tests for Lab 12: Deutsch-Jozsa Algorithm
 # Copyright 2021 The MITRE Corporation. All Rights Reserved.
 
 import unittest
