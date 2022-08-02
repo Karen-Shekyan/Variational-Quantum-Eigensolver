@@ -21,7 +21,8 @@ from qiskit.utils.mitigation import CompleteMeasFitter
 from qiskit.providers.aer.noise import NoiseModel
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, execute, Aer
 from qiskit.utils import QuantumInstance
-from qiskit.opflow import PauliExpectation, CircuitSampler, StateFn, X, Y, Z, I, CircuitStateFn 
+from qiskit.opflow import PauliExpectation, CircuitSampler, StateFn, X, Y, Z, I, CircuitStateFn
+from qiskit import IBMQ 
 
 #Input:
     #params - numpy array containing parameters to be optimized
@@ -124,7 +125,7 @@ def measureExpectationValue(array, standardError, circuit):
     #simulation of measurement results
     measurement = ClassicalRegister(len(array))
     circuit.measure(input, measurement)
-    simulator = Aer.get_backend('aer_simulator')
+    simulator = provider.get_backend('simulator_stabilizer')
 
     #runs 1/standard error squared times for standard error given
     simulation = execute(circuit, simulator, shots=(1/standardError)^2)
@@ -147,7 +148,8 @@ def measureExpectationValue(array, standardError, circuit):
 np.random.seed(999999)
 p0 = np.random.random()
 target_distr = {0: p0, 1: 1-p0}
-backend = Aer.get_backend("aer_simulator")
+provider = IBMQ.load_account()
+backend = provider.get_backend('simulator_stabilizer')
 
 def get_var_form(params):
     qr = QuantumRegister(1, name="q")

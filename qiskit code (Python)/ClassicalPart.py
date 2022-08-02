@@ -104,3 +104,12 @@ def objective_function(params):
 # print(circuit)
 # print(optimizeParams(np.random.rand(3)))
 # print(type(optimizeParams(np.random.rand(3))))
+from pennylane import numpy as np
+
+symbols = ["H"]
+coordinates = np.array([0.0, 0.0, 0.0])
+import pennylane as qml
+
+H, qubits = qml.qchem.molecular_hamiltonian(symbols, coordinates)
+print("Number of qubits = ", qubits)
+print("The Hamiltonian is ", H)

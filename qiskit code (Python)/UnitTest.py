@@ -14,8 +14,8 @@ import numpy as np
 class VQETests(unittest.TestCase):
 
     def test1(self):
-        electrons = 2
-        orbitals = 8
+        electrons = 1
+        orbitals = 4
 
         thetaArray = np.array([])
         for i in range(orbitals*2):
@@ -23,8 +23,9 @@ class VQETests(unittest.TestCase):
 
         # print(thetaArray)
         standardError = 0.5
-        hamiltonian =  (-1.0523732 * I^I) + (0.39793742 * I^Z) + (-0.3979374 * Z^I) \
-    + (-0.0112801 * Z^Z) + (0.18093119 * X^X)
+    #     hamiltonian =  (-1.0523732 * I^I) + (0.39793742 * I^Z) + (-0.3979374 * Z^I) \
+    # + (-0.0112801 * Z^Z) + (0.18093119 * X^X)
+        hamiltonian = (-0.27293036432559103 * I^I) + (0.03963943913641628 * I^Z) + (0.03963943913641629 * I^Z) + (0.19365148605275848 * Z^Z)
 
         result = main.VQE(electrons, orbitals, standardError, thetaArray, hamiltonian)
         print("\n")
